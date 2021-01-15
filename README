@@ -1,0 +1,20 @@
+This is a program designed to solve an n-body simulation:
+A group of particles subject to internal forces and external forces, and how the system
+evolves in time.
+
+Alongside the various C++ files that compose the particle_solve program, there is a 
+Python file: 'plotter.py' which produces an animation of the particles at hand,
+if given the correct number of particles in the simulation.
+
+
+Running the program:
+(if your compiler is g++):
+	Enter the folder that contains all the files
+	Run 'make' in the directory
+	run './particle_solve'
+	run 'python plotter.py'
+	
+	This should produce a running animation of the code.
+	
+If your compiler is not g++, change the makefile to include your compiler.
+If you want a different executable name, change the settings in the makefile.

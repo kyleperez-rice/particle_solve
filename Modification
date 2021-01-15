@@ -1,0 +1,79 @@
+The particle_solve function here is a bit simple, but it should be quite modular.
+It is written to accept forces that can vary in both space and time, of both the 
+internal and external type.
+
+
+1. CHANGING THE FORCES PRESENT
+	MODIFY: forces.cpp
+At base, I have only implemented the gravitational force as the internal force, but we can
+modify this to be the Coulomb Force, Magnetic Force, etc, or all of them. We can do
+this by simply modifying the 'int_part_i()' functions to what we would like them to be.
+
+The actual internal_i() functions shouldn't have to be touched, since they simply sum over all the internal forces on a given particle; if you wish to include self-interaction in a non-singular way,
+it may have to be modified.
+
+At base, we have no external forces present, but we can add any external force that we so may
+choose by modifying the return statement of the 'external_i()' functions. Note that these 
+functions should accept 'particle' class elements instead of doubles. So, make sure that 
+you use the class elements of particles for computations instead.
+
+This similarly applies if you want to add another force; you can declare more class elements in 'forces.h' and declare the functions in 'forces.cpp'.
+
+
+2. ADDING PARTICLE PROPERTIES
+	MODIFY: particle.h
+		particle_solve_functions.h
+		particle_solve_functions.cpp
+		particle_solve.cpp
+So far, I have only implemented the necessary properties for a Newtonian solver: mass, position, and
+velocity; coupled with the forces specified, this is sufficient to solve a gravitational n-body
+simulation.
+
+I have also added a 'dummy' class: charge, which is implemented in the 'particle' class, but goes
+unused otherwise (no forces depend on it). So, it serves as an example on how to implement new
+particle properties (ie: color, spin, etc) which can be accessed by forces in the 'forces' class.
+
+You can add more properties by simply declaring it in the 'particle.h' file; if your property
+is a function for some reason, make sure to declare the function in 'particle.cpp'.
+
+Then, you need to initialize this property, if you intend to you use. You should declare a 
+function that serves to initialize the new element in 'particle_solve_functions.h', and then
+define the function in 'particle_solve_functions.cpp'.
+
+Finally, you need to call the function in 'particle_solve.cpp' to that the properties are
+assigned to each particle. These properties are usually set at the beginning of the 
+simulation, so you need to call the assignation function during initialization phase,
+which occurs at lines 60-83 in 'particle_solve.cpp'.
+
+
+3. CHANGING INITIAL CONDITIONS
+	MODIFY: particle_solve_functions.cpp
+This program has a simple case of the masses of the particles all being uniform, with the
+particles all being uniformly separated in the x-direction, and all having the same y,z values.
+This is of course just a simple orientation of everything, and we can make things a lot more 
+complicated.
+
+To change the initial positions, we need to modify the 'init_ipos_dist()' functions, which
+distribute the 'xpos'/'ypos'/'zpos' class values for each particle. Note that the functions
+accept an integer and output a double! This means that you need to be careful of how you
+initially index your particles (from there, everything should be handled automatically).
+
+If you want to generate crystals, latices, etc, there should be a well-defined algorithm that
+you can implement, but it may be complicated! You can always assign positions manually via
+hard-coding.
+
+Similar issues present itself with the 'init_ivel_dist()' functions, which distribute the initial
+velocities of the particles in each direction.
+
+You can similarly define algorithms to change the mass/other properties of the particles.
+
+
+4. CHANGING THE SOLVER
+	MODIFY: particle_solve.cpp
+This program only uses a simple (and inaccurate) Euler-method solver; this serves as more of a 
+proof-of-concept instead of a true, accurate solver.
+
+The actual solving for the positions and velocities of the system occur in lines 110-130 in
+particle_solve.cpp. Feel free to implement your own solver. Given the compactness of the program,
+this should prove to be a fairly straightforward endevour.
+	
